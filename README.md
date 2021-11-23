@@ -1,0 +1,2 @@
+# skg
+seminar knowledge graphs
