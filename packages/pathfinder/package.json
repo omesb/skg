@@ -1,0 +1,31 @@
+{
+  "name": "pathfinder",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "type": "module",
+  "license": "",
+  "author": "",
+  "source": "src/index.html",
+  "targets": {
+    "default": {
+      "distDir": "docs/"
+    }
+  },
+  "scripts": {
+    "start": "parcel --open",
+    "build": "parcel build --public-url ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "graphy": "^4.3.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.1",
+    "@types/react": "^17.0.35",
+    "@types/react-dom": "^17.0.11",
+    "parcel": "^2.0.1"
+  }
+}

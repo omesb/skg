@@ -1,0 +1,223 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+# @prefix grddl: <http://www.w3.org/2003/g/data-view#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+# @prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+
+
+
+####### UI Schema #######
+
+
+ui:Page
+  rdf:type rdfs:Class ;
+  rdfs:label "Page" ;
+  rdfs:comment "A single Page of the UI. Only one page is visible at a time. Pages are navigated through with Transitions." .
+
+ui:Page/label
+  rdf:type rdf:Property ;
+  rdfs:domain ui:Page ;
+  rdfs:label "Label" ;
+  rdfs:comment "The label text that is displayed on the Page." .
+
+ui:SelectOrCreatePage
+  rdf:type rdfs:Class ;
+  rdfs:subClassOf ui:Page ;
+  rdfs:label "Select/Create Page" ;
+  rdfs:comment "A special kind of Page, where existing domain items can be selected and new ones created." .
+
+ui:SelectOrCreatePage/targetType
+  rdf:type rdf:Property ;
+  rdfs:domain ui:SelectOrCreatePage ;
+  rdfs:range rdfs:Class ;
+  rdfs:label "Target Type" ;
+  rdfs:comment "The target type which shall be selected or created on this SelectOrCreatePage. For instance, this might point to an Activity class, if Activity objects are to be selected or created." .
+
+
+ui:Transition
+  rdf:type rdfs:Class ;
+  rdfs:label "Transition" ;
+  rdfs:comment "A single Transition of the UI. Transitions are used to navigate from the source Page to the target Page." .
+
+ui:Transition/label
+  rdf:type rdf:Property ;
+  rdfs:domain ui:Transition ;
+  rdfs:label "Label" ;
+  rdfs:comment "A label text which is displayed in the UI (e.g. on a button) to explain the Transition to the user." .
+
+ui:Transition/position
+  rdf:type rdf:Property ;
+  rdfs:domain ui:Transition ;
+  rdfs:range ui:TransitionPosition ;
+  rdfs:label "Position" ;
+  rdfs:comment "The position of the transition button on the source Page (e.g. ui:LEFT)." .
+
+ui:Transition/sourcePage
+  rdf:type rdf:Property , owl:FunctionalProperty ;
+  rdfs:domain ui:Transition ;
+  rdfs:range ui:Page ;
+  rdfs:label "Source page" ;
+  rdfs:comment "The previous page that is the source of the Transition." .
+
+ui:Transition/targetPage
+  rdf:type rdf:Property , owl:FunctionalProperty ;
+  rdfs:domain ui:Transition ;
+  rdfs:range ui:Page ;
+  rdfs:label "Target page" ;
+  rdfs:comment "The next page that is the target of the Transition." .
+
+ui:TransitionPosition rdf:type rdfs:Class .
+ui:TOP rdf:type rdfs:TransitionPosition .
+ui:BOTTOM rdf:type rdfs:TransitionPosition .
+ui:LEFT rdf:type rdfs:TransitionPosition .
+ui:RIGHT rdf:type rdfs:TransitionPosition .
+ui:CENTER rdf:type rdfs:TransitionPosition .
+
+
+
+####### Tracking Schema #######
+
+track:User
+  rdf:type rdfs:Class ;
+  rdfs:label "User" ;
+  rdfs:comment "A User that visits the application and whose Paths are tracked." ;
+  owl:equivalentClass foaf:Person .
+
+track:Path
+  rdf:type rdfs:Class ;
+  rdfs:label "Path" ;
+  rdfs:comment "A Path taken by the User. Also known as User journey. The Path consists of multiple Steps that navigate Pages through Transitions." .
+
+track:Path/user
+  rdf:type rdf:Property ;
+  rdf:domain track:Path ;
+  rdf:range track:User ;
+  rdfs:label "Path" ;
+  rdfs:comment "The User who creates the Path navigating the application." .
+
+
+#track:Step
+#- track:Step/user # aka dc:creator
+#- track:Step/datetime # aka dc:created
+#- track:Step/path (rdfs:range=track:Path)
+#- track:Step/sequenceNumber
+#- track:Step/transition (rdfs:range=ui:Transition)
+#- track:Step/itemCreated
+#- track:Step/itemSelected
+
+
+
+
+
+
+
+####### Sample UI #######
+
+ppui:Start a ui:Page ;
+  ui:Page/label "How can I help you?"@en .
+
+ppui:Transition/1 a ui:Transition ;
+  ui:Transition/label "I could use some Mood Tracking"@en ;
+  ui:Transition/position ui:CENTER ;
+  ui:Transition/sourcePage ppui:Start ;
+  ui:Transition/targetPage ppui:MoodTracking .
+
+ppui:MoodTracking a ui:Page ;
+  ui:Page/label "What do you want to do?"@en .
+
+ppui:Transition/2 a ui:Transition ;
+  ui:Transition/label "Ask me how I'm feeling!"@en ;
+  ui:Transition/position ui:CENTER ;
+  ui:Transition/sourcePage ppui:MoodTracking ;
+  ui:Transition/targetPage ppui:MoodTrackingCurrentMood .
+
+ppui:Transition/3 a ui:Transition ;
+  ui:Transition/label "Tell me how I felt before!"@en ;
+  ui:Transition/position ui:CENTER ;
+  ui:Transition/sourcePage ppui:MoodTracking ;
+  ui:Transition/targetPage ppui:MoodTrackingMoodHistory .
+
+ppui:MoodTrackingCurrentMood a ui:Page ;
+  ui:Page/label "So, how are you?"@en .
+
+ppui:Mood/Excellent a ui:Transition ;
+  ui:Transition/label "Excellent"@en ;
+  ui:Transition/position ui:CENTER ;
+  ui:Transition/sourcePage ppui:MoodTrackingCurrentMood ;
+  ui:Transition/targetPage ppui:MoodTrackingHappy .
+
+ppui:Mood/Good a ui:Transition ;
+  ui:Transition/label "Excellent"@en ;
+  ui:Transition/position ui:CENTER ;
+  ui:Transition/sourcePage ppui:MoodTrackingCurrentMood ;
+  ui:Transition/targetPage ppui:MoodTrackingHappy .
+
+ppui:Mood/Neutral a ui:Transition ;
+  ui:Transition/label "Pff, just normal..."@en ;
+  ui:Transition/label "Solala"@de ;
+  ui:Transition/position ui:CENTER ;
+  ui:Transition/sourcePage ppui:MoodTrackingCurrentMood ;
+  ui:Transition/targetPage ppui:MoodTrackingSolala .
+
+ppui:Mood/Bad a ui:Transition ;
+  ui:Transition/label "Excellent"@en ;
+  ui:Transition/position ui:CENTER ;
+  ui:Transition/sourcePage ppui:MoodTrackingCurrentMood ;
+  ui:Transition/targetPage ppui:MoodTrackingSad .
+
+ppui:MoodTrackingHappy a ui:Page ;
+  ui:Page/label "Oh wow, so happy?! Lucky you!"@en .
+
+ppui:MoodTrackingSolala a ui:Page ;
+  ui:Page/label "Ah ok, I see..."@en .
+
+ppui:MoodTrackingSad a ui:Page ;
+  ui:Page/label "So sad?! What a pitty!"@en .
+
+ppui:StartOver a ui:Transition ;
+  ui:Transition/label "Start over"@en ;
+  ui:Transition/position ui:TOP ;
+  ui:Transition/sourcePage ppui:MoodTrackingHappy ;
+  ui:Transition/sourcePage ppui:MoodTrackingSolala ;
+  ui:Transition/sourcePage ppui:MoodTrackingSad ;
+  ui:Transition/targetPage ppui:Start .
+
+
+
+
+####### Sample User Data #######
+
+user:Omes a track:User , foaf:Person ;
+  foaf:name "Omes" .
+
+user:Hendrik a track:User , foaf:Person ;
+  foaf:name "Hendrik" .
+
+pptrack:Path/1 a track:Path ;
+  dc:creator user:Omes ;
+  dc:created "2021-10-25T10:52:00" .
+
+pptrack:Path/1/1 a track:Step
+  dc:creator user:Omes ;
+  dc:created "2021-10-25T10:52:00" ;
+  track:Step/path pptrack:Path/1 ;
+  track:Step/sequenceNumber "1"^^xsd:int ;
+  track:Step/transition ppui:Transition/1 .
+
+pptrack:Path/1/2 a track:Step
+  dc:creator user:Omes ;
+  dc:created "2021-10-25T10:52:10" ;
+  track:Step/path pptrack:Path/1 ;
+  track:Step/sequenceNumber "2"^^xsd:int ;
+  track:Step/transition ppui:Transition/2 .
+
+pptrack:Path/1/3 a track:Step
+  dc:creator user:Omes ;
+  dc:created "2021-10-25T10:52:20" ;
+  track:Step/path pptrack:Path/1 ;
+  track:Step/sequenceNumber "3"^^xsd:int ;
+  track:Step/transition ppui:Mood/Excellent .

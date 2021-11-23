@@ -1,0 +1,32 @@
+{
+  "name": "psychopath",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "compile": "yarn tsc -p tsconfig.json",
+    "bundle": "yarn browserify -p esmify build/js/main.js -o dist/res/psychopath-bundled.js",
+    "build": "yarn compile && yarn bundle",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.noc.ruhr-uni-bochum.de/ewerlhyc/psychopath.git"
+  },
+  "keywords": [
+    "mental-health",
+    "seminatic-diary",
+    "rdf"
+  ],
+  "author": "Omes Baltes, Hendrik Ewerlin",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@types/feather-icons": "^4.7.0",
+    "feather-icons": "^4.28.0"
+  },
+  "devDependencies": {
+    "browserify": "^17.0.0",
+    "esmify": "^2.1.1",
+    "typescript": "^4.4.4"
+  }
+}
