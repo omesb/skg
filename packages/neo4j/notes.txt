@@ -1,0 +1,77 @@
+- approach {name: "jon"}
+- approach {name: "jon", needs: ["name", "..."]}
+- approach -[:NAME]-> ({value: "jon"})
+x approach -[:NAME {required: true, priority: 0}]-> ({value: "jon"})
+- approach -[:NEEDS]-> (:NAME {value: "jon"})
+
+--- NEO4J DATA TYPES
+- property types
+Number, an abstract type, which has the subtypes Integer and Float
+String
+Boolean
+The spatial type Point
+Temporal types: Date, Time, LocalTime, DateTime, LocalDateTime and Duration
+- COMPOSITE TYPES
+List and Map
+
+--- LITERAL TYPES
+create (Number :Number { key: "Number" })
+create (String :String { key: "String" })
+create (Boolean :Boolean { key: "Boolean" })
+create (Date :Date { key: "Date" })
+create (Pointer :Pointer { key: "Pointer" })
+
+--- XSD TYPES
+- CORE TYPES
+xsd:string => Character strings (but not all Unicode character strings)
+xsd:boolean => true, false
+xsd:decimal => Arbitrary-precision decimal numbers
+xsd:integer => Arbitrary-size integer numbers
+- IEEE FLOATING-POINT NUMBERS
+xsd:double => 64-bit floating point numbers incl. ±Inf, ±0, NaN
+xsd:float => 32-bit floating point numbers incl. ±Inf, ±0, NaN
+- TIME AND DATE
+xsd:date => Dates (yyyy-mm-dd) with or without timezone
+xsd:time => Times (hh:mm:ss.sss…) with or without timezone
+xsd:dateTime => Date and time with or without timezone
+xsd:dateTimeStamp => Date and time with required timezone
+- RECURRING AND PARTIAL DATES
+xsd:gYear => Gregorian calendar year
+xsd:gMonth => Gregorian calendar month
+xsd:gDay => Gregorian calendar day of the month
+xsd:gYearMonth => Gregorian calendar year and month
+xsd:gMonthDay => Gregorian calendar month and day
+xsd:duration => Duration of time
+xsd:yearMonthDuration => Duration of time (months and years only)
+xsd:dayTimeDuration => Duration of time (days, hours, minutes, seconds only)
+- LIMITED-RANGE INTEGER NUMBERS
+xsd:byte => -128…+127 (8 bit)
+xsd:short => -32768…+32767 (16 bit)
+xsd:int => -2147483648…+2147483647 (32 bit)
+xsd:long => -9223372036854775808…+9223372036854775807 (64 bit)
+xsd:unsignedByte => 0…255 (8 bit)
+xsd:unsignedShort => 0…65535 (16 bit)
+xsd:unsignedInt => 0…4294967295 (32 bit)
+xsd:unsignedLong => 0…18446744073709551615 (64 bit)
+xsd:positiveInteger => Integer numbers >0
+xsd:nonNegativeInteger => Integer numbers ≥0
+xsd:negativeInteger => Integer numbers <0
+xsd:nonPositiveInteger => Integer numbers ≤0
+- ENCODED BINARY DATA
+xsd:hexBinary => Hex-encoded binary data
+xsd:base64Binary => Base64-encoded binary data
+Miscellaneous XSD types
+xsd:anyURI => Absolute or relative URIs and IRIs
+xsd:language => Language tags per [BCP47]
+xsd:normalizedString => Whitespace-normalized strings
+xsd:token => Tokenized strings
+xsd:NMTOKEN => XML NMTOKENs
+xsd:Name => XML Names
+xsd:NCName => XML NCNames
+
+Literal Types
+create (Data :Data { key: "Data" })
+create (LiteralType :LiteralType {
+  key: "LiteralType",
+  uri: "rdfs:Literal"
+})
