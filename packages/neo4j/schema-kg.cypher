@@ -1,8 +1,13 @@
-// Abstract
+// delete graph
+match (n) detach delete n;
 
 // Classes
 create (Person :Person {
   uri: "schema:Person"
+})
+create (PageLink :PageLink {
+  uri: ":PageLink",
+  propertyFilters: "string[]"
 })
 create (Place :Place {
   uri: "schema:Place"
