@@ -1,7 +1,7 @@
-import { Props } from "./Page";
+import { LazyNeo4JPage } from "./LazyNeo4jPage";
 
-interface WelcomePageProps extends Props {}
+interface WelcomePageProps {}
 
 export function WelcomePage(props: WelcomePageProps) {
-  return <h1>Hello world!</h1>;
+  return <LazyNeo4JPage id={1} />;
 }
