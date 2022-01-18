@@ -1,3 +1,4 @@
+import { Visibility } from "../../../node_modules/@material-ui/icons/index";
 import { Property } from "./Schema";
 
 type PropertyEditorProps = {
@@ -12,6 +13,6 @@ export function PropertyEditor(props: PropertyEditorProps) {
 
             <input value={props.value} onChange={(event) => { props.onChange(event.target.value) }} />
 
-            <p>Note: This input will be saved and visible to others.</p>
+            <p><Visibility /> Note: This input will be saved and visible to others.</p>
         </div>;
 }

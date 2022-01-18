@@ -1,4 +1,5 @@
 import React from "react";
+import { AddCircle, Create, Filter, Search, Visibility } from "../../../node_modules/@material-ui/icons/index";
 import { CreateFlow } from "./CreateFlow";
 import { EditorInterface, SearchResult } from "./EditorInterface";
 import { Instance, Reference } from "./Schema";
@@ -157,7 +158,7 @@ export class ReferenceEditor extends React.Component<ReferenceEditorProps, Refer
             <h2>Selecting {this.props.reference.label} (of type {this.props.reference.targetTypeName})</h2>
 
             <div>
-                Filter: 
+                <Search />
                 <input value={this.state.filter} onChange={(event) => this.setFilter(event.target.value)} />
             </div>
 
@@ -178,10 +179,10 @@ export class ReferenceEditor extends React.Component<ReferenceEditorProps, Refer
             </div> }
 
             <p>
-                <button onClick={() => this.startCreateFlow()}>Not found? Create!</button>
+                <button onClick={() => this.startCreateFlow()}>Not found? Create! <AddCircle /></button>
             </p>
 
-            <p>Note: This input will be saved and visible to others.</p>
+            <p><Visibility /> Note: This input will be saved and visible to others.</p>
         </div>);
     }
 }

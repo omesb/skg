@@ -4,8 +4,9 @@ import { loadPage } from "../GraphDB/Neo4jAccessor";
 import { DecisionPage } from "./DecisionPage";
 import { Page } from "./Page";
 
-export interface LazyNeo4JPageProps {
-    id: number;
+type LazyNeo4JPageProps = {
+    id: number | undefined;
+    type: string | undefined;
 }
 
 export interface LazyNeo4JPageState {
@@ -21,7 +22,7 @@ export class LazyNeo4JPage extends React.Component<LazyNeo4JPageProps, LazyNeo4J
     }
 
     componentDidMount() {
-        loadPage(this.props.id).then(component => {
+        loadPage(this.props.id, this.props.type).then(component => {
             this.setState({
                 loadedComponent: component
             });
@@ -36,7 +37,7 @@ export class LazyNeo4JPage extends React.Component<LazyNeo4JPageProps, LazyNeo4J
         return <div>
             <h1>[LazyNeo4jPage]</h1>
 
-            Loading page with id={this.props.id}
+            Loading page with id={this.props.id} / type={this.props.type}
         </div>
     }
 }

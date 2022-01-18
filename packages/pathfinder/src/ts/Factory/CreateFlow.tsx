@@ -1,4 +1,5 @@
 import React from "react";
+import { Cancel, CloudUpload, Save, SkipNext, SkipPrevious } from "../../../node_modules/@material-ui/icons/index";
 import { EditorInterface } from "./EditorInterface";
 import { PropertyEditor } from "./PropertyEditor";
 import { ReferenceEditor } from "./ReferenceEditor";
@@ -42,8 +43,12 @@ export class CreateFlow extends React.Component<CreateFlowProps, CreateFlowState
             type: type,
             instance: {
                 id: undefined,
-                propertyValues: {},
-                referenceValues: {},
+                propertyValues: {
+                    "created": new Date().toISOString()
+                },
+                referenceValues: {
+                    "INSTANCEOF": [type.typeNodeID]
+                },
                 typeName: type.typeName,
                 typeNodeID: type.typeNodeID
             },
@@ -135,7 +140,7 @@ export class CreateFlow extends React.Component<CreateFlowProps, CreateFlowState
             status: "creating"
         });
 
-        this.props.editorInterface.saveInstance(this.state.instance).then(newInstance => {
+        this.props.editorInterface.saveInstance(this.state.instance).then((newInstance: Instance) => {
             this.handleSaved(newInstance);
         });
     }
@@ -170,10 +175,9 @@ export class CreateFlow extends React.Component<CreateFlowProps, CreateFlowState
             { this.renderPageIndexComponent() }
 
             <div>
-                <button onClick={() => this.abort()}>Abort</button>
-
-                {this.state.pageIndex > 0 ? <button onClick={() => this.prevPage()}>Previous page</button> : "" }
-                {this.state.pageIndex < this.getLastPage() ? <button onClick={() => this.nextPage()}>Next page</button> : ""}
+                <button onClick={() => this.abort()}><Cancel /></button>
+                <button onClick={() => this.prevPage()}><SkipPrevious /></button>
+                <button onClick={() => this.nextPage()}><SkipNext /></button>
             </div>
         </div>;
     }
@@ -208,7 +212,11 @@ export class CreateFlow extends React.Component<CreateFlowProps, CreateFlowState
             return <ReferenceEditor reference={reference} value={value} editorInterface={this.props.editorInterface} onChange={setValue} key={reference.name} />
        } else {
            return <div>
-                <button onClick={() => this.save()}>Save</button>
+               You're done...<br/><br/>
+
+                <button onClick={() => this.save()}><CloudUpload /> Save!</button>
+
+                <br/><br/>
            </div>
        }
     }
