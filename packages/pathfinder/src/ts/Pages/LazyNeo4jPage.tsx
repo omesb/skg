@@ -1,4 +1,5 @@
 import React from "react";
+import { Result } from "../../../node_modules/neo4j-driver/types/index";
 import { loadPage } from "../GraphDB/Neo4jAccessor";
 import { DecisionPage } from "./DecisionPage";
 import { Page } from "./Page";
@@ -20,17 +21,11 @@ export class LazyNeo4JPage extends React.Component<LazyNeo4JPageProps, LazyNeo4J
     }
 
     componentDidMount() {
-        // TODO query graph
-        window.setTimeout(() => {
+        loadPage(this.props.id).then(component => {
             this.setState({
-                loadedComponent: <DecisionPage
-                                    name="Want some cookies?"
-                                    yesComponent={<div>Here you are! (:) (:) (:) (:) (:)</div>}
-                                    noComponent={<LazyNeo4JPage id={2} />} />
+                loadedComponent: component
             });
-        }, 1000);
-
-        loadPage(this.props.id);
+        });
     }
 
     render() {
@@ -38,6 +33,10 @@ export class LazyNeo4JPage extends React.Component<LazyNeo4JPageProps, LazyNeo4J
             return this.state.loadedComponent;
         }
 
-        return "Loading... (id=" + this.props.id + ")";
+        return <div>
+            <h1>[LazyNeo4jPage]</h1>
+
+            Loading page with id={this.props.id}
+        </div>
     }
 }

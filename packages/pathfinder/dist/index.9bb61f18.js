@@ -22919,7 +22919,7 @@ var _jsxRuntime = require("react/jsx-runtime");
 var _lazyNeo4JPage = require("./LazyNeo4jPage");
 function WelcomePage(props) {
     return(/*#__PURE__*/ _jsxRuntime.jsx(_lazyNeo4JPage.LazyNeo4JPage, {
-        id: 1,
+        id: 0,
         __source: {
             fileName: "packages/pathfinder/src/ts/Pages/WelcomePage.tsx",
             lineNumber: 6,
@@ -22952,7 +22952,6 @@ var _jsxRuntime = require("react/jsx-runtime");
 var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _neo4JAccessor = require("../GraphDB/Neo4jAccessor");
-var _decisionPage = require("./DecisionPage");
 class LazyNeo4JPage extends _reactDefault.default.Component {
     constructor(props){
         super(props);
@@ -22961,31 +22960,35 @@ class LazyNeo4JPage extends _reactDefault.default.Component {
         };
     }
     componentDidMount() {
-        // TODO query graph
-        window.setTimeout(()=>{
+        _neo4JAccessor.loadPage(this.props.id).then((component)=>{
             this.setState({
-                loadedComponent: /*#__PURE__*/ _jsxRuntime.jsx(_decisionPage.DecisionPage, {
-                    name: "Want some cookies?",
-                    yesComponent: /*#__PURE__*/ _jsxRuntime.jsx("div", {
-                        children: "Here you are! (:) (:) (:) (:) (:)"
-                    }),
-                    noComponent: /*#__PURE__*/ _jsxRuntime.jsx(LazyNeo4JPage, {
-                        id: 2
-                    }),
-                    __source: {
-                        fileName: "packages/pathfinder/src/ts/Pages/LazyNeo4jPage.tsx",
-                        lineNumber: 26,
-                        columnNumber: 34
-                    },
-                    __self: this
-                })
+                loadedComponent: component
             });
-        }, 1000);
-        _neo4JAccessor.loadPage(this.props.id);
+        });
     }
     render() {
         if (this.state.loadedComponent) return this.state.loadedComponent;
-        return "Loading... (id=" + this.props.id + ")";
+        return(/*#__PURE__*/ _jsxRuntime.jsxs("div", {
+            __source: {
+                fileName: "packages/pathfinder/src/ts/Pages/LazyNeo4jPage.tsx",
+                lineNumber: 36,
+                columnNumber: 16
+            },
+            __self: this,
+            children: [
+                /*#__PURE__*/ _jsxRuntime.jsx("h1", {
+                    __source: {
+                        fileName: "packages/pathfinder/src/ts/Pages/LazyNeo4jPage.tsx",
+                        lineNumber: 37,
+                        columnNumber: 13
+                    },
+                    __self: this,
+                    children: "[LazyNeo4jPage]"
+                }),
+                "Loading page with id=",
+                this.props.id
+            ]
+        }));
     }
 }
 
@@ -22994,7 +22997,120 @@ class LazyNeo4JPage extends _reactDefault.default.Component {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"6Ds2u","react":"4mchR","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","./DecisionPage":"5QoH1","../GraphDB/Neo4jAccessor":"4bIrb"}],"5QoH1":[function(require,module,exports) {
+},{"react":"4mchR","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","../GraphDB/Neo4jAccessor":"kKxul","react/jsx-runtime":"6Ds2u"}],"kKxul":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$752c = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$752c.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "loadPage", ()=>loadPage
+);
+var _jsxRuntime = require("react/jsx-runtime");
+var _pageBuilder = require("../Pages/PageBuilder");
+var _errorPages = require("../Pages/ErrorPages");
+async function loadPage(id) {
+    let neo4j = require('neo4j-driver');
+    let driver = neo4j.driver('neo4j://localhost:7687/', neo4j.auth.basic('neo4j', 'yolo'));
+    let session = driver.session({
+    });
+    console.log("Loading page " + id);
+    let pageInfo = await session.run("match (start) WHERE id(start)=$id return start", {
+        id: id
+    });
+    if (pageInfo.records.length > 0) {
+        let pageLabels = pageInfo.records[0].get("start").labels;
+        let pageProperties = pageInfo.records[0].get("start").properties;
+        let nextIds = {
+        };
+        let pageNext = await session.run("match (start) -[edge]-> (target) WHERE id(start)=$id return edge", {
+            id: id
+        });
+        pageNext.records.forEach((record)=>{
+            let type = record.get("edge").type;
+            let endId = record.get("edge").end.toInt();
+            nextIds[type] = endId;
+        });
+        session.close();
+        console.log("Loaded. Labels:", pageLabels, "Properties:", pageProperties, "Next IDs:", nextIds);
+        return _pageBuilder.buildPage(pageLabels, pageProperties, nextIds);
+    } else {
+        session.close();
+        return(/*#__PURE__*/ _jsxRuntime.jsx(_errorPages.NotFoundPage, {
+            __source: {
+                fileName: "packages/pathfinder/src/ts/GraphDB/Neo4jAccessor.tsx",
+                lineNumber: 40,
+                columnNumber: 16
+            },
+            __self: this
+        }));
+    }
+}
+
+  $parcel$ReactRefreshHelpers$752c.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-runtime":"6Ds2u","../Pages/PageBuilder":"5I0Tn","neo4j-driver":"3HYZv","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","../Pages/ErrorPages":"etuTY"}],"5I0Tn":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$8b45 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$8b45.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "buildPage", ()=>buildPage
+);
+var _jsxRuntime = require("react/jsx-runtime");
+var _decisionPage = require("./DecisionPage");
+var _lazyNeo4JPage = require("./LazyNeo4jPage");
+var _errorPages = require("./ErrorPages");
+var _infoPage = require("./InfoPage");
+function buildPage(pageLabels, pageProperties, nextIds) {
+    if (pageLabels.indexOf("Decision") >= 0 && nextIds["YES"] && nextIds["NO"]) return(/*#__PURE__*/ _jsxRuntime.jsx(_decisionPage.DecisionPage, {
+        name: pageProperties.name,
+        yesComponent: /*#__PURE__*/ _jsxRuntime.jsx(_lazyNeo4JPage.LazyNeo4JPage, {
+            id: nextIds["YES"]
+        }),
+        noComponent: /*#__PURE__*/ _jsxRuntime.jsx(_lazyNeo4JPage.LazyNeo4JPage, {
+            id: nextIds["NO"]
+        }),
+        __source: {
+            fileName: "packages/pathfinder/src/ts/Pages/PageBuilder.tsx",
+            lineNumber: 12,
+            columnNumber: 16
+        },
+        __self: this
+    }));
+    if (pageLabels.indexOf("Info") >= 0) return(/*#__PURE__*/ _jsxRuntime.jsx(_infoPage.InfoPage, {
+        name: pageProperties.name,
+        __source: {
+            fileName: "packages/pathfinder/src/ts/Pages/PageBuilder.tsx",
+            lineNumber: 20,
+            columnNumber: 16
+        },
+        __self: this
+    }));
+    return(/*#__PURE__*/ _jsxRuntime.jsx(_errorPages.UnknownTypePage, {
+        __source: {
+            fileName: "packages/pathfinder/src/ts/Pages/PageBuilder.tsx",
+            lineNumber: 24,
+            columnNumber: 12
+        },
+        __self: this
+    }));
+}
+
+  $parcel$ReactRefreshHelpers$8b45.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-runtime":"6Ds2u","./DecisionPage":"5QoH1","./LazyNeo4jPage":"9WM1m","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","./ErrorPages":"etuTY","./InfoPage":"leedt"}],"5QoH1":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$6987 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -23027,14 +23143,17 @@ function DecisionPage(props) {
         },
         __self: this,
         children: [
-            /*#__PURE__*/ _jsxRuntime.jsx("h1", {
+            /*#__PURE__*/ _jsxRuntime.jsxs("h1", {
                 __source: {
                     fileName: "packages/pathfinder/src/ts/Pages/DecisionPage.tsx",
                     lineNumber: 27,
                     columnNumber: 9
                 },
                 __self: this,
-                children: props.name
+                children: [
+                    "[Decision] ",
+                    props.name
+                ]
             }),
             "Yes or No?",
             /*#__PURE__*/ _jsxRuntime.jsx("button", {
@@ -23070,38 +23189,97 @@ $RefreshReg$(_c, "DecisionPage");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"6Ds2u","react":"4mchR","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"4bIrb":[function(require,module,exports) {
+},{"react/jsx-runtime":"6Ds2u","react":"4mchR","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"etuTY":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$63e3 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$63e3.prelude(module);
+
+try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "loadPage", ()=>loadPage
+parcelHelpers.export(exports, "NotFoundPage", ()=>NotFoundPage
 );
-function loadPage(id) {
-    let neo4j = require('neo4j-driver');
-    let driver = neo4j.driver('neo4j://localhost:7687/', neo4j.auth.basic('neo4j', 'yolo'));
-    let session = driver.session({
-    });
-    session.run('match (start) -[edge]-> (target) WHERE id(start)=$id return edge, target', {
-        id: id
-    }).subscribe({
-        onKeys: (keys)=>{
-            console.log("keys:" + keys);
+parcelHelpers.export(exports, "UnknownTypePage", ()=>UnknownTypePage
+);
+var _jsxRuntime = require("react/jsx-runtime");
+function NotFoundPage() {
+    return(/*#__PURE__*/ _jsxRuntime.jsx("h1", {
+        __source: {
+            fileName: "packages/pathfinder/src/ts/Pages/ErrorPages.tsx",
+            lineNumber: 2,
+            columnNumber: 12
         },
-        onNext: (record)=>{
-            console.log(record);
-            console.log(record.get("edge").type + " leads to " + record.get("target").identity.toInt());
-        },
-        onCompleted: ()=>{
-            console.log("Ready");
-            session.close() // returns a Promise
-            ;
-        },
-        onError: (error)=>{
-            console.log(error);
-        }
-    });
+        __self: this,
+        children: "Page not found! :-("
+    }));
 }
+_c = NotFoundPage;
+function UnknownTypePage() {
+    return(/*#__PURE__*/ _jsxRuntime.jsx("h1", {
+        __source: {
+            fileName: "packages/pathfinder/src/ts/Pages/ErrorPages.tsx",
+            lineNumber: 6,
+            columnNumber: 12
+        },
+        __self: this,
+        children: "Unknown type! :-("
+    }));
+}
+_c1 = UnknownTypePage;
+var _c, _c1;
+$RefreshReg$(_c, "NotFoundPage");
+$RefreshReg$(_c1, "UnknownTypePage");
 
-},{"neo4j-driver":"3HYZv","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"3HYZv":[function(require,module,exports) {
+  $parcel$ReactRefreshHelpers$63e3.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-runtime":"6Ds2u","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"leedt":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$b899 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$b899.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "InfoPage", ()=>InfoPage
+);
+var _jsxRuntime = require("react/jsx-runtime");
+function InfoPage(props) {
+    return(/*#__PURE__*/ _jsxRuntime.jsx("div", {
+        __source: {
+            fileName: "packages/pathfinder/src/ts/Pages/InfoPage.tsx",
+            lineNumber: 8,
+            columnNumber: 12
+        },
+        __self: this,
+        children: /*#__PURE__*/ _jsxRuntime.jsxs("h1", {
+            __source: {
+                fileName: "packages/pathfinder/src/ts/Pages/InfoPage.tsx",
+                lineNumber: 9,
+                columnNumber: 9
+            },
+            __self: this,
+            children: [
+                "[Info] ",
+                props.name
+            ]
+        })
+    }));
+}
+_c = InfoPage;
+var _c;
+$RefreshReg$(_c, "InfoPage");
+
+  $parcel$ReactRefreshHelpers$b899.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-runtime":"6Ds2u","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"3HYZv":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");

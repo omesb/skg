@@ -24,7 +24,7 @@ export function DecisionPage(props: DecisionPageProps) {
     }
 
     return <div>
-        <h1>{props.name}</h1>
+        <h1>[Decision] {props.name}</h1>
 
         Yes or No?
 
