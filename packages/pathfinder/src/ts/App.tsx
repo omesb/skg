@@ -1,5 +1,5 @@
-import { Page } from "./Pages/Page";
+import { WelcomePage } from "./Pages/WelcomePage";
 
 export function App() {
-  return <Page name="hi" />;
+  return <WelcomePage />;
 }

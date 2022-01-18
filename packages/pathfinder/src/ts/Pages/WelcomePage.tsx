@@ -1,7 +1,9 @@
-import { Props } from "./Page";
+import { CreateFlow } from "../Factory/CreateFlow";
+import { MockEditorInterface } from "../Factory/MockEditorImpl";
+import { LazyNeo4JPage } from "./LazyNeo4jPage";
 
-interface WelcomePageProps extends Props {}
+interface WelcomePageProps {}
 
 export function WelcomePage(props: WelcomePageProps) {
-  return <h1>Hello world!</h1>;
+  return <LazyNeo4JPage id={undefined} type={"Start"} />;
 }

@@ -1,7 +1,7 @@
-export interface Props {
+export interface PageProps {
   name: string
 }
 
-export function Page(props: Props) {
-  return <h1>Hello world!</h1>;
+export function Page(props: PageProps) {
+  return <h1>{props.name}</h1>;
 }
