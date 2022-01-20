@@ -1,26 +1,25 @@
-import { DecisionPage } from "./DecisionPage";
 import { LazyNeo4JPage } from "./LazyNeo4jPage";
 import { UnknownTypePage } from "./ErrorPages";
-import { InfoPage } from "./InfoPage";
 import { FactoryPage } from "./FactoryPage";
+import { NavigationPage } from "./NavigationPage";
+
+export type Edge = {
+    type: string;
+    targetNodeID: number;
+    name: string | undefined;
+}
 
 export type NextIDs = {
     [type: string]: number
 };
 
-export function buildPage(pageLabels: string[], pageProperties: any, nextIds: NextIDs) {
-    if(pageLabels.indexOf("Decision") >= 0 && nextIds["YES"] !== undefined && nextIds["NO"] !== undefined) {
-        return <DecisionPage 
+export function buildPage(pageLabels: string[], pageProperties: any, edges: Edge[], nextIds: NextIDs) {
+    if(pageLabels.indexOf("Decision") >= 0 || pageLabels.indexOf("Info") >= 0 || pageLabels.indexOf("Navigation") >= 0) {
+        return <NavigationPage
                     name={pageProperties.name}
-                    yesComponent={<LazyNeo4JPage id={nextIds["YES"]} type={undefined} />}
-                    noComponent={<LazyNeo4JPage id={nextIds["NO"]} type={undefined} />}
-                />
-    }
-
-    if(pageLabels.indexOf("Info") >= 0) {
-        return <InfoPage
-                    name={pageProperties.name}
-                    nextComponent={nextIds["NEXT"] ? <LazyNeo4JPage id={nextIds["NEXT"]} type={undefined} /> : undefined}/>
+                    image={pageProperties.image}
+                    link={pageProperties.link}
+                    edges={edges} />
     }
 
     if(pageLabels.indexOf("Factory") >= 0 && nextIds["CREATES"] !== undefined && nextIds["ONCREATED"] !== undefined && nextIds["ONABORTED"] !== undefined) {

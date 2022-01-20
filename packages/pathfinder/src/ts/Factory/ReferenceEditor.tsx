@@ -172,7 +172,7 @@ export class ReferenceEditor extends React.Component<ReferenceEditorProps, Refer
                                 (<div onClick={() => this.toggle(searchResult)}
                                     style={{cursor: "pointer", background: (this.props.value.indexOf(searchResult.id) >= 0 ? "#8f8" : "#ddd") }}
                                     key={searchResult.id}>
-                                        { searchResult.name } (#{searchResult.id})
+                                        { searchResult.name }
                                 </div>)
                         )
                 }</div>

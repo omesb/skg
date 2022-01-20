@@ -1,8 +1,6 @@
 import React from "react";
-import { Result } from "../../../node_modules/neo4j-driver/types/index";
+import ClimbingBoxLoader from "../../../node_modules/react-spinners/ClimbingBoxLoader";
 import { loadPage } from "../GraphDB/Neo4jAccessor";
-import { DecisionPage } from "./DecisionPage";
-import { Page } from "./Page";
 
 type LazyNeo4JPageProps = {
     id: number | undefined;
@@ -34,10 +32,8 @@ export class LazyNeo4JPage extends React.Component<LazyNeo4JPageProps, LazyNeo4J
             return this.state.loadedComponent;
         }
 
-        return <div>
-            <h1>[LazyNeo4jPage]</h1>
-
-            Loading page with id={this.props.id} / type={this.props.type}
+        return <div style={{marginLeft:"50px", marginTop:"50px", opacity: 0.2}}>
+            <ClimbingBoxLoader />
         </div>
     }
 }

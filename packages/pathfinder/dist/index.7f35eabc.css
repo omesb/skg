@@ -1,0 +1,27 @@
+body {
+    background: #eee;
+    color: #222;
+    max-width: 40em;
+    margin: 10px auto;
+}
+
+body, input, textarea, button {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 10pt;
+    line-height: 1.5em;
+}
+
+h1, h2 {
+    line-height: 1.2em;
+}
+
+svg {
+    vertical-align: middle;
+}
+
+button {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+/*# sourceMappingURL=index.7f35eabc.css.map */

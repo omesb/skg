@@ -1,5 +1,4 @@
 import { CreateFlow } from "../Factory/CreateFlow";
-import { MockEditorInterface } from "../Factory/MockEditorImpl";
 import { LazyNeo4JPage } from "./LazyNeo4jPage";
 
 interface WelcomePageProps {}
