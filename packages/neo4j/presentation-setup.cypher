@@ -9,6 +9,10 @@ create
     (Mood_name:Property {name:"name"}),
     (Mood) -[:HAS]-> (Mood_name),
 
+    (Activity:Type {name:"Activity"}),
+    (Activity_name:Property {name:"name"}),
+    (Activity) -[:HAS]-> (Activity_name),
+
     (Appointment:Type {name:"Appointment"}),
     (Appointment_title:Property {name:"title"}),
     (Appointment_date:Property {name:"date"}),
@@ -19,14 +23,15 @@ create
     (Appointment_participant) -[:REFERENCES]-> (Person),
 
     (SemanticDiaryEntry:Type {name:"SemanticDiaryEntry"}),
-    (SemanticDiaryEntry_comment:Property {name:"comment"}),
-    (SemanticDiaryEntry_with:Reference {name:"with"}),
-    (SemanticDiaryEntry_feeling:Reference {name:"feeling"}),
-    (SemanticDiaryEntry) -[:HAS]-> (SemanticDiaryEntry_comment),
+    (SemanticDiaryEntry_with:Reference {name:"WITH", label:"Who was with you?"}),
+    (SemanticDiaryEntry_feeling:Reference {name:"FEELING", label:"How did you feel?"}),
+    (SemanticDiaryEntry_did:Reference {name:"DID", label:"What did you do?"}),
     (SemanticDiaryEntry) -[:HAS]-> (SemanticDiaryEntry_with),
     (SemanticDiaryEntry_with) -[:REFERENCES]-> (Person),
     (SemanticDiaryEntry) -[:HAS]-> (SemanticDiaryEntry_feeling),
     (SemanticDiaryEntry_feeling) -[:REFERENCES]-> (Mood),
+    (SemanticDiaryEntry) -[:HAS]-> (SemanticDiaryEntry_did),
+    (SemanticDiaryEntry_did) -[:REFERENCES]-> (Activity),
 
     (Start:Info:Start {name: "Welcome, fellow Knowledge Graph lover!", image: "https://media0.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif"}),
     (TourDecision:Decision {name:"Would you like a short tour?"}),
@@ -52,7 +57,7 @@ create
     (Tour9:Info {name:"Enter: (:Factory) pages!", image: "https://media.giphy.com/media/n1JN4fSrXovJe/giphy.gif"}),
     (Tour10:Info {name:"(:Factory) Pages let users create their own Semantic Data in the KG."}),
     (Tour12:Info {name:"First, let's see them in action!"}),
-    
+
     (Tour13:Decision {name:"Would you like to create an Appointment Node?"}),
     (TourFactory:Factory),
     (Tour14:Decision {name:"Nice, you created an Appointment! Create another?", image: "https://media.giphy.com/media/Q81NcsY6YxK7jxnr4v/giphy.gif"}),
@@ -118,25 +123,29 @@ create
     (Todo:Info {name:"Path not created yet..."}),
     (Tour27) -[:NEXT {name: "Start again"}]-> (Start),
 
-    (CreateSemanticDiaryDecision:Decision {name: "Do you want to create a semantic diary entry?"}),
+    (NormalUI1:Info {name:"Right now, we focus on Semantic Diary."}),
+    (CreateSemanticDiaryDecision:Decision {name: "Do you want to create a Semantic Diary Entry?"}),
     (SemanticDiaryFactory:Factory {}),
     (Created:Info {name:"Fine! You created an entry! :-)" }),
+    (CreateAnotherSemanticDiaryDecision:Decision {name: "Do you want to create another Semantic Diary Entry?"}),
     (End:Info {name: "End of flow"}),
 
     (Start) -[:NEXT]-> (TourDecision),
+    (NormalUI1) -[:NEXT]-> (CreateSemanticDiaryDecision),
     (TourDecision) -[:YES]-> (TourStart),
     (TourDecision) -[:NO]-> (NormalUserExperienceDecision),
-    (NormalUserExperienceDecision) -[:YES]-> (Todo),
+    (NormalUserExperienceDecision) -[:YES]-> (NormalUI1),
     (NormalUserExperienceDecision) -[:NO]-> (WhatThen),
     (WhatThen) -[:NEXT {name:"MAOAM! MAOAM! MAOAM!"}]-> (Maoam),
     (Maoam) -[:NEXT]-> (End),
     (Todo) -[:NEXT]-> (Start),
-
 
     (CreateSemanticDiaryDecision) -[:YES]-> (SemanticDiaryFactory),
     (CreateSemanticDiaryDecision) -[:NO]-> (End),
     (SemanticDiaryFactory) -[:ONCREATED]-> (Created),
     (SemanticDiaryFactory) -[:ONABORTED]-> (End),
     (SemanticDiaryFactory) -[:CREATES]-> (SemanticDiaryEntry),
-    (Created) -[:NEXT]-> (CreateSemanticDiaryDecision),
-    (End) -[:NEXT]-> (Start);
+    (Created) -[:NEXT]-> (CreateAnotherSemanticDiaryDecision),
+    (CreateAnotherSemanticDiaryDecision) -[:YES]-> (SemanticDiaryFactory),
+    (CreateAnotherSemanticDiaryDecision) -[:NO]-> (End),
+    (End) -[:NEXT {name:"Start over"}]-> (Start);
