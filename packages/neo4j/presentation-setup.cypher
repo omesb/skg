@@ -55,9 +55,9 @@ create
     
     (Tour13:Decision {name:"Would you like to create an Appointment Node?"}),
     (TourFactory:Factory),
-    (Tour14:Decision {name:"Fine, you created an Appointment! Create another?", image: "https://media.giphy.com/media/Q81NcsY6YxK7jxnr4v/giphy.gif"}),
+    (Tour14:Decision {name:"Nice, you created an Appointment! Create another?", image: "https://media.giphy.com/media/Q81NcsY6YxK7jxnr4v/giphy.gif"}),
     (Tour15:Decision {name:"Okay, do you want to learn how (:Factory) pages work?"}),
-    (Tour16:Info {name:"They are connected to the KG Ontology, which holds information on what to create."}),
+    (Tour16:Info {name:"They are connected to the Ontology, which defines the structure of the semantic data."}),
     (Tour17:Info {name:"(:Factory) has a [:CREATES] link to an Ontology (:Type)", image: "https://raw.githubusercontent.com/omesb/skg-assets/main/img/Factory.png"}),
     (Tour18:Info {name:"An Ontology (:Type) has Relationships to Literals and Types and acts as a Template for the KG data.", image: "https://raw.githubusercontent.com/omesb/skg-assets/main/img/Ontology.png"}),
     (Tour19:Info {name:"Maybe you have seen the nested create flow. We can create a (:Person) that's a [:PARTICIPANT] of an (:Appointment).", image: "https://media.giphy.com/media/xTeWOVI8shjIDTq9Yk/giphy.gif"}),
