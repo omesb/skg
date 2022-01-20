@@ -65,8 +65,8 @@ create
     (Tour21:Info {name:"Phew, that was a lot of info!", image:"https://media.giphy.com/media/Sr9hCCA4KE137h6VIV/giphy.gif"}),
     (Tour22:Decision {name:"Would you like a short summary?"}),
     (Tour23:Info {name:"We have 3 different Graph DB's in this App:", image: "https://media.giphy.com/media/js5AtUrnzA8ZI5ocks/giphy.gif"}),
-    (Tour24:Info {name:"1. Path Graph - Pages, like (:Decision), (:Info), (:Navigation), (:Factory). They define the UI and interact with the other Graphs."}),
-    (Tour25:Info {name:"2. Ontology Graph - (:Type), (:Property), (:Reference), [:HAS], etc. It defines the Ontology of the KG and the Semantic Data Structure that a (:Factory) creates."}),
+    (Tour24:Info {name:"1. Path Graph - Pages like (:Decision), (:Info), (:Navigation), (:Factory). They define the UI and interact with the other Graphs."}),
+    (Tour25:Info {name:"2. Ontology Graph - It defines the Ontology of the Knowledge Graph and the Semantic Data Structure that a (:Factory) creates."}),
     (Tour26:Info {name:"3. Knowledge Graph - The Users personal Knowledge Graph. It is enriched by the user through navigation decisions and use of the (:Factory)."}),
     (Tour27:Info {name:"That's all for now! Enjoy our app!", image:"https://media.giphy.com/media/BUOlQ1H5RCR1K/giphy.gif"}),
 
