@@ -28,7 +28,7 @@ create (Navigation :Navigation {
   content: "html5"
 })
 create (Query:Query {
-  name: "Query",
+  name: "Factory",
   label: "string",
   content: "html5"
 })

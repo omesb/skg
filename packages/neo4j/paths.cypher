@@ -9,7 +9,7 @@ create (KG_Subtask :Type {name: "KG_Subtask"})
 
 // #region root Page Links
 create (root :Navigation {
-  name: "root",
+  name: "Start Navigation",
   label: "Choose a path",
   content: "This is the first Procrastination Page"
 })
@@ -68,7 +68,7 @@ create (p2n :Decision {
 })
 
 create (p2yy :Query {
-  name: "p2yy",
+  name: "Factory",
   label: "are there urgent tasks you're avoiding?",
   yesColor: "HEX",
   noColor: "HEX"
